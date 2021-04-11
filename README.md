@@ -24,3 +24,18 @@ Anyway, Here is my setup :
 - Text Editor : nvim (terminal), geany (graphical)
 - Bar : [Polybar](https://github.com/adi1090x/polybar-themes) , i3bar
 - Polkit : LXpolkit
+# Installation
+
+- Install chzmoi first
+
+> Arch Linux \
+> sudo pacman -S chzmoi
+
+> Snap \
+> sudo snap install chzmoi --classic
+
+More info here : https://www.chezmoi.io/docs/install/
+
+- Run this command
+chezmoi init https://github.com/username/dotfiles.git && chezmoi apply
+
