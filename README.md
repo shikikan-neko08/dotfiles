@@ -28,10 +28,10 @@ Anyway, Here is my setup :
 
 - Install chzmoi first
 
-> Arch Linux \
+> Arch Linux / Other Arch based distribution (Alter Linux, Manjaro, EndeavourOS, etc...) \
 > sudo pacman -S chzmoi
 
-> Snap \
+> Snap (ubuntu, etc..)\
 > sudo snap install chzmoi --classic
 
 More info here : https://www.chezmoi.io/docs/install/
