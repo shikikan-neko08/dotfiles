@@ -1,8 +1,0 @@
-2021/04/08-17:56:52.824 aa5d7 Reusing MANIFEST /home/shikikan/.config/chromium/Default/IndexedDB/https_googleads.g.doubleclick.net_0.indexeddb.leveldb/MANIFEST-000001
-2021/04/08-17:56:52.825 aa5d7 Recovering log #4
-2021/04/08-17:56:52.825 aa5d7 Reusing old log /home/shikikan/.config/chromium/Default/IndexedDB/https_googleads.g.doubleclick.net_0.indexeddb.leveldb/000004.log 
-2021/04/08-17:57:02.753 abaf4 Level-0 table #8: started
-2021/04/08-17:57:02.753 abaf4 Level-0 table #8: 0 bytes OK
-2021/04/08-17:57:02.797 abaf4 Delete type=0 #4
-2021/04/08-17:57:02.797 abaf4 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
-2021/04/08-17:57:02.797 abaf4 Manual compaction at level-1 from (begin) .. (end); will stop at (end)

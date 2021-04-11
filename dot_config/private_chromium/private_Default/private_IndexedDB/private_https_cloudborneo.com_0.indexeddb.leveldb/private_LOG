@@ -1,5 +1,0 @@
-2021/04/04-08:21:02.196 a73 Reusing MANIFEST /home/shikikan/.config/chromium/Default/IndexedDB/https_cloudborneo.com_0.indexeddb.leveldb/MANIFEST-000001
-2021/04/04-08:30:11.956 b67 Level-0 table #5: started
-2021/04/04-08:30:12.396 b67 Level-0 table #5: 5690 bytes OK
-2021/04/04-08:30:12.524 b67 Delete type=0 #3
-2021/04/04-08:30:12.537 892 Manual compaction at level-0 from (begin) .. (end); will stop at (end)

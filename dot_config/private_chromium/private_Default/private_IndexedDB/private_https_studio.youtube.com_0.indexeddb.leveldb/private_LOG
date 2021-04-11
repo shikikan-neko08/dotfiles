@@ -1,5 +1,0 @@
-2021/04/09-07:32:42.432 2923 Reusing MANIFEST /home/shikikan/.config/chromium/Default/IndexedDB/https_studio.youtube.com_0.indexeddb.leveldb/MANIFEST-000001
-2021/04/09-08:38:09.591 12775 Level-0 table #5: started
-2021/04/09-08:38:09.755 12775 Level-0 table #5: 2560 bytes OK
-2021/04/09-08:38:09.789 12775 Delete type=0 #3
-2021/04/09-08:38:09.789 1276c Manual compaction at level-0 from (begin) .. (end); will stop at (end)

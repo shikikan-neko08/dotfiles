@@ -1,5 +1,0 @@
-2021/04/07-15:05:18.431 27ee Reusing MANIFEST /home/shikikan/.config/chromium/Default/IndexedDB/https_www.atlassian.com_0.indexeddb.leveldb/MANIFEST-000001
-2021/04/07-15:05:42.074 1e34 Level-0 table #5: started
-2021/04/07-15:05:42.077 1e34 Level-0 table #5: 1527 bytes OK
-2021/04/07-15:05:42.082 1e34 Delete type=0 #3
-2021/04/07-15:05:42.085 2b5d Manual compaction at level-0 from (begin) .. (end); will stop at (end)

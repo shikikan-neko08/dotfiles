@@ -1,5 +1,0 @@
-2021/04/04-00:44:41.940 3425 Reusing MANIFEST /home/shikikan/.config/chromium/Default/IndexedDB/https_www.pixiv.net_0.indexeddb.leveldb/MANIFEST-000001
-2021/04/04-00:44:49.955 26d7 Level-0 table #5: started
-2021/04/04-00:44:50.063 26d7 Level-0 table #5: 50041 bytes OK
-2021/04/04-00:44:50.789 26d7 Delete type=0 #3
-2021/04/04-00:44:50.791 27a9 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
