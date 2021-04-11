@@ -1,0 +1,5 @@
+2021/04/09-21:14:08.488 5faa9 Reusing MANIFEST /home/shikikan/.config/chromium/Default/IndexedDB/https_ubuntu-indonesia.com_0.indexeddb.leveldb/MANIFEST-000001
+2021/04/09-21:15:12.513 62f22 Level-0 table #5: started
+2021/04/09-21:15:12.668 62f22 Level-0 table #5: 830 bytes OK
+2021/04/09-21:15:12.743 62f22 Delete type=0 #3
+2021/04/09-21:15:12.744 63185 Manual compaction at level-0 from (begin) .. (end); will stop at (end)

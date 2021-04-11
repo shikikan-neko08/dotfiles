@@ -1,0 +1,15 @@
+2021/04/05-15:30:05.316 1ca126 Reusing MANIFEST /home/shikikan/.config/chromium/Default/IndexedDB/https_www.instagram.com_0.indexeddb.leveldb/MANIFEST-000001
+2021/04/05-15:30:05.317 1ca126 Recovering log #4
+2021/04/05-15:30:05.323 1ca126 Reusing old log /home/shikikan/.config/chromium/Default/IndexedDB/https_www.instagram.com_0.indexeddb.leveldb/000004.log 
+2021/04/05-15:34:50.317 1ca128 Level-0 table #8: started
+2021/04/05-15:34:50.352 1ca128 Level-0 table #8: 23991 bytes OK
+2021/04/05-15:34:50.415 1ca128 Delete type=0 #4
+2021/04/05-15:34:50.415 1ca128 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2021/04/05-15:34:50.415 1ca125 Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x01\x01\x02\x01\x0e\x00u\x00s\x00e\x00r\x00s\x00.\x00v\x00i\x00e\x00w\x00e\x00r\x00I\x00d' @ 222 : 1
+2021/04/05-15:34:50.415 1ca125 Compacting 1@1 + 1@2 files
+2021/04/05-15:34:50.432 1ca125 Generated table #9@1: 37 keys, 1523 bytes
+2021/04/05-15:34:50.432 1ca125 Compacted 1@1 + 1@2 files => 1523 bytes
+2021/04/05-15:34:50.436 1ca125 compacted to: files[ 0 0 1 0 0 0 0 ]
+2021/04/05-15:34:50.456 1ca125 Delete type=2 #8
+2021/04/05-15:34:50.456 1ca125 Delete type=2 #5
+2021/04/05-15:34:50.456 1ca128 Manual compaction at level-1 from '\x00\x01\x01\x02\x01\x0e\x00u\x00s\x00e\x00r\x00s\x00.\x00v\x00i\x00e\x00w\x00e\x00r\x00I\x00d' @ 222 : 1 .. (end); will stop at (end)

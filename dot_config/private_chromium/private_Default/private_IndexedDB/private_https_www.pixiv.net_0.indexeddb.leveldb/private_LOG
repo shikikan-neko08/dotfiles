@@ -1,0 +1,15 @@
+2021/04/04-00:45:17.561 340b Reusing MANIFEST /home/shikikan/.config/chromium/Default/IndexedDB/https_www.pixiv.net_0.indexeddb.leveldb/MANIFEST-000001
+2021/04/04-00:45:17.564 340b Recovering log #4
+2021/04/04-00:45:17.564 340b Reusing old log /home/shikikan/.config/chromium/Default/IndexedDB/https_www.pixiv.net_0.indexeddb.leveldb/000004.log 
+2021/04/04-00:57:06.440 47f7 Level-0 table #8: started
+2021/04/04-00:57:08.165 47f7 Level-0 table #8: 192327 bytes OK
+2021/04/04-00:57:09.104 47f7 Delete type=0 #4
+2021/04/04-00:57:09.262 47f5 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2021/04/04-00:57:09.366 47f5 Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x01\x02\x02\x01\x04\x00w\x00o\x00r\x00k' @ 833 : 1
+2021/04/04-00:57:09.366 47f5 Compacting 1@1 + 1@2 files
+2021/04/04-00:57:10.117 47f5 Generated table #9@1: 137 keys, 145461 bytes
+2021/04/04-00:57:10.117 47f5 Compacted 1@1 + 1@2 files => 145461 bytes
+2021/04/04-00:57:10.427 47f5 compacted to: files[ 0 0 1 0 0 0 0 ]
+2021/04/04-00:57:10.428 47f5 Delete type=2 #8
+2021/04/04-00:57:10.428 47f5 Delete type=2 #5
+2021/04/04-00:57:10.428 47cf Manual compaction at level-1 from '\x00\x01\x02\x02\x01\x04\x00w\x00o\x00r\x00k' @ 833 : 1 .. (end); will stop at (end)

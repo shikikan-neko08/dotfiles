@@ -1,0 +1,7 @@
+2021/04/07-14:55:01.409 27ee Reusing MANIFEST /home/shikikan/.config/chromium/Default/IndexedDB/https_docs.google.com_0.indexeddb.leveldb/MANIFEST-000001
+2021/04/07-14:55:01.409 27ee Recovering log #3
+2021/04/07-14:55:01.429 27ee Reusing old log /home/shikikan/.config/chromium/Default/IndexedDB/https_docs.google.com_0.indexeddb.leveldb/000003.log 
+2021/04/07-14:58:28.948 27ee Level-0 table #5: started
+2021/04/07-14:58:28.997 27ee Level-0 table #5: 8314 bytes OK
+2021/04/07-14:58:29.024 27ee Delete type=0 #3
+2021/04/07-14:58:29.025 2312 Manual compaction at level-0 from (begin) .. (end); will stop at (end)

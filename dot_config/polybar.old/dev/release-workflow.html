@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Release Workflow &#8212; Polybar User Manual 3.5.5 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Packaging Polybar" href="packaging.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="release-workflow">
+<h1>Release Workflow<a class="headerlink" href="#release-workflow" title="Permalink to this headline">¶</a></h1>
+<p>We try to follow <a class="reference external" href="https://semver.org/">Semantic Versioning</a> in this project.
+Patch releases (e.g. <code class="docutils literal notranslate"><span class="pre">3.3.X</span></code>) contain only bug fixes. Minor releases (e.g.
+<code class="docutils literal notranslate"><span class="pre">3.X.0</span></code>) can have backwards-compatible features. And major releases (
+<code class="docutils literal notranslate"><span class="pre">X.0.0</span></code>) can introduce incompatible changes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This document replaces the &quot;<a class="reference external" href="https://github.com/polybar/polybar/wiki/Release-Guidelines">Release Guidelines</a>&quot; on the wiki
+that we used between 3.2.0 and 3.4.3. Starting with 3.5.0, we will follow
+the workflow described here to publish releases.</p>
+</div>
+<p>Polybar uses the <a class="reference external" href="https://www.endoflineblog.com/oneflow-a-git-branching-model-and-workflow">OneFlow</a>
+branching model for publishing new releases and introducing hotfixes.</p>
+<p>The way we accept code from contributors does not change: Contributors fork
+polybar, commit their changes to a new branch and open a PR to get that branch
+merged.
+After reviewing and approving the changes, a maintainer &quot;merges&quot; the PR.
+&quot;Merging&quot; is done in the GitHub UI by either rebasing or squashing the
+changes.
+Regular merging is disabled because we do not want merge a merge commit for
+every PR.</p>
+<p>This document is mainly concerned with how to properly release a new version of
+polybar.
+For that reason this might not be of interest to you, if you are not a
+maintainer, but feel free to read on anyway.</p>
+<div class="section" id="drafting-a-new-release">
+<h2>Drafting a new Release<a class="headerlink" href="#drafting-a-new-release" title="Permalink to this headline">¶</a></h2>
+<p>There a two processes for how to draft a new release. The process for major and
+minor versions is the same as they both are &quot;regular&quot; releases.
+Patch releases are triggered by bugfixes that cannot wait until the next regular
+release and have a slightly different workflow.</p>
+<div class="section" id="regular-releases-major-minor">
+<h3>Regular Releases (Major, Minor)<a class="headerlink" href="#regular-releases-major-minor" title="Permalink to this headline">¶</a></h3>
+<p>Regular releases are created once we find that <code class="docutils literal notranslate"><span class="pre">master</span></code> is in a stable state
+and that there are enough new features to justify a new release.
+A release branch <code class="docutils literal notranslate"><span class="pre">release/X.Y.0</span></code> is branched off of a commit on <code class="docutils literal notranslate"><span class="pre">master</span></code>
+that contains all the features we want in the release, this branch is pushed to
+the official repository.
+For example for version <code class="docutils literal notranslate"><span class="pre">3.5.0</span></code> the branch <code class="docutils literal notranslate"><span class="pre">release/3.5.0</span></code> would be created:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git checkout -b release/3.5.0 &lt;commit&gt;
+</pre></div>
+</div>
+<p>The release branch should typically only exist for at most a few days.</p>
+</div>
+<div class="section" id="hotfix-releases-patch">
+<h3>Hotfix Releases (Patch)<a class="headerlink" href="#hotfix-releases-patch" title="Permalink to this headline">¶</a></h3>
+<p>A hotfix release is created whenever we receive a fix for a bug that we believe
+should be released immediately instead of it only being part of the next regular
+release.
+Generally any bugfix qualifies, but it is up to the maintainers to decide
+whether a hotfix release should be created.</p>
+<p>The hotfix release branch <code class="docutils literal notranslate"><span class="pre">hotfix/X.Y.Z</span></code> is created by branching off at the
+previous release tag (<code class="docutils literal notranslate"><span class="pre">X.Y.Z-1</span></code>).
+For example, if the latest version is <code class="docutils literal notranslate"><span class="pre">3.5.2</span></code>, the next hotfix will be on
+branch <code class="docutils literal notranslate"><span class="pre">hotfix/3.5.3</span></code>:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git checkout -b hotfix/3.5.3 <span class="m">3</span>.5.2
+</pre></div>
+</div>
+<p>Since the PRs for such bugfixes are often not created by maintainers, they will
+often not be based on the latest release tag, but just be branched off
+<code class="docutils literal notranslate"><span class="pre">master</span></code> because contributors don't necessarily know about this branching
+model and also may well not know whether a hotfix will be created for a certain
+bugfix.</p>
+<p>In case a PR containing a bugfix that is destined for a patch release is not
+branched off the previous release, a maintainer creates the proper release
+branch and cherry-picks the bugfix commits.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Alternatively, the contributor can also <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rebase</span> <span class="pre">--onto</span></code> to base the
+branch off the previous release tag. However, in most cases it makes sense for
+a maintainer to create the release branch since they will also need to add a
+<a class="reference internal" href="#release-commit">Release Commit</a> to it.</p>
+</div>
+<p>Once the release branch is created and contains the right commits, the
+maintainer should follow <a class="reference internal" href="#publishing-a-new-release">Publishing a new Release</a> to finish this patch
+release.</p>
+<p>If multiple bugfixes are submitted in close succession, they can all be
+cherry-picked onto the same patch release branch to not create many individual
+release with only a single fix.
+The maintainer can also decide to leave the release branch for this patch
+release open for a week in order to possibly combine multiple bugfixes into a
+single release.</p>
+</div>
+</div>
+<div class="section" id="publishing-a-new-release">
+<h2>Publishing a new Release<a class="headerlink" href="#publishing-a-new-release" title="Permalink to this headline">¶</a></h2>
+<p>The process for publishing a release is the same for all release types. It goes
+as follows:</p>
+<ul class="simple">
+<li><p>A <a class="reference internal" href="#release-commit">Release commit</a> is added to the tip of the release branch.</p></li>
+<li><p>A draft PR is opened for the release branch. This PR MUST NOT be merged in
+GitHub's interface, it is only here for review, merging happens at the
+commandline.</p></li>
+<li><p>After approval, the GitHub release publishing tool is used to publish the
+release and tag the tip of the release branch (the release commit).</p></li>
+<li><p>After the tag is created, the release branch is manually merged into
+<code class="docutils literal notranslate"><span class="pre">master</span></code>.
+Here it is vitally important that the history of the release branch does not
+change and so we use <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">merge</span></code>. We do it manually because using <code class="docutils literal notranslate"><span class="pre">git</span>
+<span class="pre">merge</span></code> is disabled on PRs.</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git checkout master
+git merge &lt;release-branch&gt;
+git push origin
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>After the tag is created, the release branch can be deleted with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span>
+<span class="pre">origin</span> <span class="pre">:&lt;release-branch&gt;</span></code>.</p></li>
+<li><p>Work through the <a class="reference internal" href="#after-release-checklist">After-Release Checklist</a>.</p></li>
+</ul>
+<p>Here <code class="docutils literal notranslate"><span class="pre">&lt;release-branch&gt;</span></code> is either a <code class="docutils literal notranslate"><span class="pre">release/X.Y.0</span></code> branch or a
+<code class="docutils literal notranslate"><span class="pre">hotfix/X.Y.Z</span></code> branch.</p>
+<div class="section" id="release-commit">
+<h3>Release Commit<a class="headerlink" href="#release-commit" title="Permalink to this headline">¶</a></h3>
+<p>When merging, a release commit must be at the tip of the release branch.</p>
+<p>The release commit needs to update the version number in:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">version.txt</span></code></p></li>
+</ul>
+<p>The commit message contains the <a class="reference internal" href="#changelog">Changelog</a> for this release.</p>
+</div>
+<div class="section" id="changelog">
+<h3>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h3>
+<p>Each release should come with a changelog briefly explaining what has changed
+for the user. It should generally be separated into 'Deprecations', 'Features',
+and 'Fixes', with 'Breaking Changes' listed separately at the top.</p>
+<p>See <a class="reference external" href="https://github.com/polybar/polybar/releases">old releases</a> for how to
+format the changelog.</p>
+<p>Since major releases generally break backwards compatibility in some way, their
+changelog should also prominently feature precisely what breaking changes were
+introduced. If suitable, maybe even separate documentation dedicated to the
+migration should be written.</p>
+</div>
+<div class="section" id="after-release-checklist">
+<h3>After-Release Checklist<a class="headerlink" href="#after-release-checklist" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Make sure all the new functionality is documented on the wiki</p></li>
+<li><p>Mark deprecated features appropriately (see <a class="reference internal" href="#deprecations">Deprecations</a>)</p></li>
+<li><p>Remove all unreleased notes from the wiki (not for patch releases)</p></li>
+<li><p>Inform packagers of new release in <a class="reference external" href="https://github.com/polybar/polybar/issues/1971">#1971</a>. Mention any dependency
+changes and any changes to the build workflow. Also mention any new files are
+created by the installation.</p></li>
+<li><p>Create a source archive named <code class="docutils literal notranslate"><span class="pre">polybar-&lt;version&gt;.tar</span></code>.
+The repository contains a script that automates this:</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./common/release-archive.sh &lt;version&gt;
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Update the github release with a download section that contains a link to
+<code class="docutils literal notranslate"><span class="pre">polybar-&lt;version&gt;.tar</span></code> and its sha256.</p></li>
+<li><p>Create a PR that updates the AUR <code class="docutils literal notranslate"><span class="pre">PKGBUILD</span></code> files for the <code class="docutils literal notranslate"><span class="pre">polybar</span></code> and
+<code class="docutils literal notranslate"><span class="pre">polybar-git</span></code> packages (push after the <code class="docutils literal notranslate"><span class="pre">.tar</span></code> file was created).</p></li>
+</ul>
+</div>
+<div class="section" id="deprecations">
+<h3>Deprecations<a class="headerlink" href="#deprecations" title="Permalink to this headline">¶</a></h3>
+<p>If any publicly facing part of polybar is being deprecated, it should be marked
+as such in the code, through warnings/errors in the log, and by comments in the
+wiki. Every deprecated functionality is kept until the next major release and
+removed there, unless it has not been deprecated in a minor release before.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Polybar User Manual</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Content:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user/actions.html">Actions</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Manual Pages:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../man/polybar.1.html">polybar(1)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/polybar.5.html">polybar(5)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">For Contributors:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="packaging.html">Packaging Polybar</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Developer Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Release Workflow</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="packaging.html" title="previous chapter">Packaging Polybar</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016-2021, Michael Carlberg & contributors.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/dev/release-workflow.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

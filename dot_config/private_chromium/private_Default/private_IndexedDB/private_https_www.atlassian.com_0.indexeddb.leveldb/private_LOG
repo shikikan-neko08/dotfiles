@@ -1,0 +1,15 @@
+2021/04/09-08:32:05.790 12776 Reusing MANIFEST /home/shikikan/.config/chromium/Default/IndexedDB/https_www.atlassian.com_0.indexeddb.leveldb/MANIFEST-000001
+2021/04/09-08:32:05.790 12776 Recovering log #4
+2021/04/09-08:32:05.790 12776 Reusing old log /home/shikikan/.config/chromium/Default/IndexedDB/https_www.atlassian.com_0.indexeddb.leveldb/000004.log 
+2021/04/09-08:33:04.606 12776 Level-0 table #8: started
+2021/04/09-08:33:04.645 12776 Level-0 table #8: 776 bytes OK
+2021/04/09-08:33:04.648 12776 Delete type=0 #4
+2021/04/09-08:33:04.648 1276d Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2021/04/09-08:33:04.649 1276d Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x01\x01\x1f\x01\x10\x003\x002\x004\x001\x007\x006\x003\x002\x009\x004\x004\x004\x006\x000\x005\x006\x00\x01(\x00c\x00t\x00.\x00p\x00.\x00m\x00.\x00V\x001\x00.\x003\x002\x004\x001\x007\x006\x003\x002\x009\x004\x004\x004\x006\x000\x005\x006\x00.\x001\x006\x001\x007\x009\x005\x007\x001\x002\x008\x008\x001\x008' @ 82 : 1
+2021/04/09-08:33:04.649 1276d Compacting 1@1 + 1@2 files
+2021/04/09-08:33:04.650 1276d Generated table #9@1: 23 keys, 741 bytes
+2021/04/09-08:33:04.650 1276d Compacted 1@1 + 1@2 files => 741 bytes
+2021/04/09-08:33:04.652 1276d compacted to: files[ 0 0 1 0 0 0 0 ]
+2021/04/09-08:33:04.652 1276d Delete type=2 #8
+2021/04/09-08:33:04.652 1276d Delete type=2 #5
+2021/04/09-08:33:04.653 12776 Manual compaction at level-1 from '\x00\x01\x01\x1f\x01\x10\x003\x002\x004\x001\x007\x006\x003\x002\x009\x004\x004\x004\x006\x000\x005\x006\x00\x01(\x00c\x00t\x00.\x00p\x00.\x00m\x00.\x00V\x001\x00.\x003\x002\x004\x001\x007\x006\x003\x002\x009\x004\x004\x004\x006\x000\x005\x006\x00.\x001\x006\x001\x007\x009\x005\x007\x001\x002\x008\x008\x001\x008' @ 82 : 1 .. (end); will stop at (end)

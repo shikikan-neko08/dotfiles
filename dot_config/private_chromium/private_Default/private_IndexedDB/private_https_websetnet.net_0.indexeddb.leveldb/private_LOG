@@ -1,0 +1,5 @@
+2021/04/09-19:40:00.882 ac84 Reusing MANIFEST /home/shikikan/.config/chromium/Default/IndexedDB/https_websetnet.net_0.indexeddb.leveldb/MANIFEST-000001
+2021/04/09-19:40:13.948 ac84 Level-0 table #5: started
+2021/04/09-19:40:14.094 ac84 Level-0 table #5: 1008 bytes OK
+2021/04/09-19:40:14.168 ac84 Delete type=0 #3
+2021/04/09-19:40:14.168 ac84 Manual compaction at level-0 from (begin) .. (end); will stop at (end)

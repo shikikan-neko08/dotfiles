@@ -1,0 +1,633 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Actions &#8212; Polybar User Manual 3.5.5 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="polybar(1)" href="../man/polybar.1.html" />
+    <link rel="prev" title="Polybar Documentation" href="../index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="actions">
+<h1>Actions<a class="headerlink" href="#actions" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 3.5.0.</span></p>
+</div>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#action-string-format" id="id3">Action String Format</a></p></li>
+<li><p><a class="reference internal" href="#triggering-actions" id="id4">Triggering Actions</a></p></li>
+<li><p><a class="reference internal" href="#available-actions" id="id5">Available Actions</a></p>
+<ul>
+<li><p><a class="reference internal" href="#internal-date" id="id6">internal/date</a></p></li>
+<li><p><a class="reference internal" href="#internal-alsa" id="id7">internal/alsa</a></p></li>
+<li><p><a class="reference internal" href="#internal-pulseaudio" id="id8">internal/pulseaudio</a></p></li>
+<li><p><a class="reference internal" href="#internal-xbacklight" id="id9">internal/xbacklight</a></p></li>
+<li><p><a class="reference internal" href="#internal-backlight" id="id10">internal/backlight</a></p></li>
+<li><p><a class="reference internal" href="#internal-xkeyboard" id="id11">internal/xkeyboard</a></p></li>
+<li><p><a class="reference internal" href="#internal-mpd" id="id12">internal/mpd</a></p></li>
+<li><p><a class="reference internal" href="#internal-xworkspaces" id="id13">internal/xworkspaces</a></p></li>
+<li><p><a class="reference internal" href="#internal-bspwm" id="id14">internal/bspwm</a></p></li>
+<li><p><a class="reference internal" href="#internal-i3" id="id15">internal/i3</a></p></li>
+<li><p><a class="reference internal" href="#custom-menu" id="id16">custom/menu</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#deprecated-action-names" id="id17">Deprecated Action Names</a></p>
+<ul>
+<li><p><a class="reference internal" href="#migration" id="id18">Migration</a></p>
+<ul>
+<li><p><a class="reference internal" href="#menu-module-example" id="id19">Menu Module Example</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p>&quot;Actions&quot; are used to trigger certain behavior in modules.
+For example, when you click on your volume module (pulseaudio or alsa), polybar
+internally sends an action to that module that tells it to mute/unmute the
+audio.</p>
+<p>These actions are not only used internally, but users can also send these
+actions to polybar through <a class="reference external" href="https://github.com/polybar/polybar/wiki/Inter-process-messaging">Inter Process Communication</a> (IPC) to
+trigger certain behavior in polybar modules.</p>
+<div class="section" id="action-string-format">
+<span id="id1"></span><h2><a class="toc-backref" href="#id3">Action String Format</a><a class="headerlink" href="#action-string-format" title="Permalink to this headline">¶</a></h2>
+<p>An action string follows the following format:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#NAME.ACTION[.DATA]
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">NAME</span></code> is the name of the target module (not the type!) and <code class="docutils literal notranslate"><span class="pre">ACTION</span></code>
+is the name of the action in that module. <code class="docutils literal notranslate"><span class="pre">DATA</span></code> is optional data attached to
+an action (for example to say which menu level should be opened).</p>
+<p>For example the
+<a class="reference external" href="https://github.com/polybar/polybar/wiki/Module:-date">date module</a> supports
+the <code class="docutils literal notranslate"><span class="pre">toggle</span></code> action to toggle between the regular and the alternative time and
+date format.
+If you have the following date module:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[module/mydate]</span>
+<span class="na">type</span> <span class="o">=</span> <span class="s">internal/date</span>
+<span class="na">...</span>
+</pre></div>
+</div>
+<p>The action string for toggling between the date formats would look like this:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#mydate.toggle
+</pre></div>
+</div>
+<p>Note that we use the name of the module (<code class="docutils literal notranslate"><span class="pre">mydate</span></code>) and not the type.</p>
+<p>As an example for an action string with additional data, take the menu module:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[module/powermenu]</span>
+<span class="na">type</span> <span class="o">=</span> <span class="s">custom/menu</span>
+<span class="na">menu-0-0</span> <span class="o">=</span> <span class="s">Poweroff</span>
+<span class="na">menu-0-0-exec</span> <span class="o">=</span> <span class="s">poweroff</span>
+<span class="na">menu-0-1</span> <span class="o">=</span> <span class="s">Suspend</span>
+<span class="na">menu-0-1-exec</span> <span class="o">=</span> <span class="s">systemctl suspend</span>
+</pre></div>
+</div>
+<p>The action name to open a certain menu level is <code class="docutils literal notranslate"><span class="pre">open</span></code>, so to open level 0
+(<cite>menu-0</cite>), the action string additionally has the level attached to it:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#powermenu.open.0
+</pre></div>
+</div>
+</div>
+<div class="section" id="triggering-actions">
+<h2><a class="toc-backref" href="#id4">Triggering Actions</a><a class="headerlink" href="#triggering-actions" title="Permalink to this headline">¶</a></h2>
+<p>Most modules already use action strings to trigger actions when you click on or
+scroll over a module.
+But in some cases you may want or need to manually send action strings to
+polybar to trigger a certain behavior.</p>
+<p>Everywhere where you can specify a command to run on click or scroll, you can
+also specify an action string.
+For example, in the bar section, you can specify a command that is triggered
+when you click anywhere on the bar (where there isn't another click action):</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[bar/mybar]</span>
+<span class="na">...</span>
+<span class="na">click-left</span> <span class="o">=</span> <span class="s">#mydate.toggle</span>
+<span class="na">...</span>
+</pre></div>
+</div>
+<p>This will then trigger the <code class="docutils literal notranslate"><span class="pre">toggle</span></code> action on the <code class="docutils literal notranslate"><span class="pre">mydate</span></code> module when you
+click anywhere on the bar.</p>
+<p>Similarly, we can use action strings in <code class="docutils literal notranslate"><span class="pre">%{A}</span></code>
+<a class="reference external" href="https://github.com/polybar/polybar/wiki/Formatting#action-a">formatting tags</a>
+just as we would regular commands:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>%{A1:firefox:}%{A3:#mydate.toggle:}Opens firefox on left-click and toggles the
+date on right-click %{A}%{A}
+</pre></div>
+</div>
+<p>Finally, polybar's <a class="reference external" href="https://github.com/polybar/polybar/wiki/Inter-process-messaging">Inter Process Communication</a> (IPC) can
+also be used to trigger actions:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>polybar-msg action <span class="s2">&quot;#mydate.toggle&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The quotes around the action string are necessary, otherwise your shell may
+interpret the <code class="docutils literal notranslate"><span class="pre">#</span></code> as the beginning of the comment and ignore the rest of the
+line.</p>
+</div>
+</div>
+<div class="section" id="available-actions">
+<h2><a class="toc-backref" href="#id5">Available Actions</a><a class="headerlink" href="#available-actions" title="Permalink to this headline">¶</a></h2>
+<p>The following modules have actions available. Most of them are already used by
+the module by default for click and scroll events.</p>
+<div class="section" id="internal-date">
+<h3><a class="toc-backref" href="#id6">internal/date</a><a class="headerlink" href="#internal-date" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">toggle</span></code></dt>
+<dd class="field-odd"><p>Toggles the date/time format between <code class="docutils literal notranslate"><span class="pre">date</span></code>/<code class="docutils literal notranslate"><span class="pre">time</span></code> and
+<code class="docutils literal notranslate"><span class="pre">date-alt</span></code>/<code class="docutils literal notranslate"><span class="pre">time-alt</span></code></p>
+</dd>
+</dl>
+</div>
+<div class="section" id="internal-alsa">
+<h3><a class="toc-backref" href="#id7">internal/alsa</a><a class="headerlink" href="#internal-alsa" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">inc</span></code>, <code class="docutils literal notranslate"><span class="pre">dec</span></code></dt>
+<dd class="field-odd"><p>Increases/Decreases the volume by <code class="docutils literal notranslate"><span class="pre">interval</span></code> percentage points, where
+<code class="docutils literal notranslate"><span class="pre">interval</span></code> is the config setting in the module. Volume changed like this
+will never go above 100%.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">toggle</span></code></dt>
+<dd class="field-even"><p>Toggles between muted and unmuted.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="internal-pulseaudio">
+<h3><a class="toc-backref" href="#id8">internal/pulseaudio</a><a class="headerlink" href="#internal-pulseaudio" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">inc</span></code>, <code class="docutils literal notranslate"><span class="pre">dec</span></code></dt>
+<dd class="field-odd"><p>Increases/Decreases the volume by <code class="docutils literal notranslate"><span class="pre">interval</span></code> percentage points, where
+<code class="docutils literal notranslate"><span class="pre">interval</span></code> is the config setting in the module. Volume changed like this
+will never go above ~153% (if <code class="docutils literal notranslate"><span class="pre">use-ui-max</span></code> is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>) or 100% (if
+not).</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">toggle</span></code></dt>
+<dd class="field-even"><p>Toggles between muted and unmuted.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="internal-xbacklight">
+<h3><a class="toc-backref" href="#id9">internal/xbacklight</a><a class="headerlink" href="#internal-xbacklight" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">inc</span></code>, <code class="docutils literal notranslate"><span class="pre">dec</span></code></dt>
+<dd class="field-odd"><p>Increases/Decreases screen brightness 5 percentage points.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="internal-backlight">
+<h3><a class="toc-backref" href="#id10">internal/backlight</a><a class="headerlink" href="#internal-backlight" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">inc</span></code>, <code class="docutils literal notranslate"><span class="pre">dec</span></code></dt>
+<dd class="field-odd"><p>Increases/Decreases screen brightness 5 percentage points.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="internal-xkeyboard">
+<h3><a class="toc-backref" href="#id11">internal/xkeyboard</a><a class="headerlink" href="#internal-xkeyboard" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list simple">
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">switch</span></code></dt>
+<dd class="field-odd"><p>Cycles through configured keyboard layouts.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="internal-mpd">
+<h3><a class="toc-backref" href="#id12">internal/mpd</a><a class="headerlink" href="#internal-mpd" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list">
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">play</span></code></dt>
+<dd class="field-odd"><p>Starts playing the current song.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">pause</span></code></dt>
+<dd class="field-even"><p>Pauses the current song.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">stop</span></code></dt>
+<dd class="field-odd"><p>Stops playing.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">prev</span></code></dt>
+<dd class="field-even"><p>Starts playing the previous song.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">next</span></code></dt>
+<dd class="field-odd"><p>Starts playing the next song.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">repeat</span></code></dt>
+<dd class="field-even"><p>Toggles repeat mode.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">single</span></code></dt>
+<dd class="field-odd"><p>Toggles single mode.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">random</span></code></dt>
+<dd class="field-even"><p>Toggles random mode.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">consume</span></code></dt>
+<dd class="field-odd"><p>Toggles consume mode.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">seek</span></code></dt>
+<dd class="field-even"><p><em>(Has Data)</em> Seeks inside the current song.</p>
+<p>The data must be of the form <code class="docutils literal notranslate"><span class="pre">[+-]N</span></code>, where <code class="docutils literal notranslate"><span class="pre">N</span></code> is a number
+between 0 and 100.</p>
+<p>If either <code class="docutils literal notranslate"><span class="pre">+</span></code> or <code class="docutils literal notranslate"><span class="pre">-</span></code> is used, it will seek forward or backward
+from the current position by <code class="docutils literal notranslate"><span class="pre">N%</span></code> (relative to the length of the
+song).
+Otherwise it will seek to <code class="docutils literal notranslate"><span class="pre">N%</span></code> of the current song.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="internal-xworkspaces">
+<h3><a class="toc-backref" href="#id13">internal/xworkspaces</a><a class="headerlink" href="#internal-xworkspaces" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list">
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">focus</span></code></dt>
+<dd class="field-odd"><p><em>(Has Data)</em> Switches to the given workspace.</p>
+<p>The data is the index of the workspace that should be selected.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">next</span></code></dt>
+<dd class="field-even"><p>Switches to the next workspace. The behavior of this action is
+affected by the <code class="docutils literal notranslate"><span class="pre">pin-workspaces</span></code> setting.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">prev</span></code></dt>
+<dd class="field-odd"><p>Switches to the previous workspace. The behavior of this action is
+affected by the <code class="docutils literal notranslate"><span class="pre">pin-workspaces</span></code> setting.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="internal-bspwm">
+<h3><a class="toc-backref" href="#id14">internal/bspwm</a><a class="headerlink" href="#internal-bspwm" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list">
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">focus</span></code></dt>
+<dd class="field-odd"><p><em>(Has Data)</em> Switches to the given workspace.</p>
+<p>The data has the form <code class="docutils literal notranslate"><span class="pre">N+M</span></code>, where <code class="docutils literal notranslate"><span class="pre">N</span></code> is the index of the
+monitor and <code class="docutils literal notranslate"><span class="pre">M</span></code> the index of the workspace on that monitor.
+Both indices are 0-based and correspond to the position the monitor
+and workspace appear in the output of <code class="docutils literal notranslate"><span class="pre">bspc</span> <span class="pre">subscribe</span> <span class="pre">report</span></code>.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">next</span></code></dt>
+<dd class="field-even"><p>Switches to the next workspace. The behavior of this action is
+affected by the <code class="docutils literal notranslate"><span class="pre">pin-workspaces</span></code> setting.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">prev</span></code></dt>
+<dd class="field-odd"><p>Switches to the previous workspace. The behavior of this action is
+affected by the <code class="docutils literal notranslate"><span class="pre">pin-workspaces</span></code> setting.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="internal-i3">
+<h3><a class="toc-backref" href="#id15">internal/i3</a><a class="headerlink" href="#internal-i3" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list">
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">focus</span></code></dt>
+<dd class="field-odd"><p><em>(Has Data)</em> Switches to the given workspace.</p>
+<p>The data is the name of the workspace defined in the i3 config.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">next</span></code></dt>
+<dd class="field-even"><p>Switches to the next workspace. The behavior of this action is
+affected by the <code class="docutils literal notranslate"><span class="pre">pin-workspaces</span></code> setting.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">prev</span></code></dt>
+<dd class="field-odd"><p>Switches to the previous workspace. The behavior of this action is
+affected by the <code class="docutils literal notranslate"><span class="pre">pin-workspaces</span></code> setting.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="custom-menu">
+<h3><a class="toc-backref" href="#id16">custom/menu</a><a class="headerlink" href="#custom-menu" title="Permalink to this headline">¶</a></h3>
+<dl class="field-list">
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">open</span></code></dt>
+<dd class="field-odd"><p><em>(Has Data)</em> Opens the given menu level</p>
+<p>The data is a single number specifying which menu level should be
+opened.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">close</span></code></dt>
+<dd class="field-even"><p>Closes the menu</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">exec</span></code></dt>
+<dd class="field-odd"><p><em>(Has Data)</em> Executes the command at the given menu element.</p>
+<p>The data has the form <code class="docutils literal notranslate"><span class="pre">N-M</span></code> and the action will execute the command
+in <code class="docutils literal notranslate"><span class="pre">menu-N-M-exec</span></code>.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="deprecated-action-names">
+<h2><a class="toc-backref" href="#id17">Deprecated Action Names</a><a class="headerlink" href="#deprecated-action-names" title="Permalink to this headline">¶</a></h2>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 3.5.0.</span></p>
+</div>
+<p>In earlier versions (&lt; 3.5.0) action strings only included information about the
+module type.
+This meant in bars that contained multiple different modules of the same type,
+actions for these modules were sometimes processed by the wrong module with the
+same type.</p>
+<p>Since version 3.5.0, this no longer happens. However, this also means we had to
+change what actions are recognized by polybar modules.</p>
+<p>If you explicitly use any polybar action names in your config or any of your
+scripts, you are advised to change them, as they may stop working at some point
+in the future.
+For now polybar still supports the old action names, will convert them to the
+appropriate new action name, and will print a warning to help you find old
+action names in your config.</p>
+<p>If you use the <a class="reference external" href="https://github.com/polybar/polybar/wiki/Module:-menu">menu module</a>, you most likely use
+old action names to open and close the menu (for example <code class="docutils literal notranslate"><span class="pre">menu-open-1</span></code> or
+<code class="docutils literal notranslate"><span class="pre">menu-close</span></code>).
+The <code class="docutils literal notranslate"><span class="pre">i3wm-wsnext</span></code>, <code class="docutils literal notranslate"><span class="pre">i3wm-wsprev</span></code>, <code class="docutils literal notranslate"><span class="pre">bspwm-desknext</span></code>, and <code class="docutils literal notranslate"><span class="pre">bspwm-deskprev</span></code>
+actions, to switch workspaces in i3 and bspwm, may also appear in your config.</p>
+<div class="section" id="migration">
+<h3><a class="toc-backref" href="#id18">Migration</a><a class="headerlink" href="#migration" title="Permalink to this headline">¶</a></h3>
+<p>Updating your config to use the new action names is quite straightforward.</p>
+<p>For each action name, consult the table below to find the new action name.
+Afterwards build the complete action string as described in
+<a class="reference internal" href="#action-string-format"><span class="std std-ref">Action String Format</span></a>.</p>
+<p>Please see <a class="reference internal" href="#menu-example"><span class="std std-ref">below</span></a> for an example of migrating a typical menu module.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 37%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Module Type</p></th>
+<th class="head"><p>Deprecated Action Name</p></th>
+<th class="head"><p>New Action Name</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">internal/date</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">datetoggle</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">toggle</span></code></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="3"><p><code class="docutils literal notranslate"><span class="pre">internal/alsa</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">volup</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">inc</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">voldown</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dec</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">volmute</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">toggle</span></code></p></td>
+</tr>
+<tr class="row-even"><td rowspan="3"><p><code class="docutils literal notranslate"><span class="pre">internal/pulseaudio</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pa_volup</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">inc</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pa_voldown</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dec</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pa_volmute</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">toggle</span></code></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">internal/xbacklight</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">xbacklight+</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">inc</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">xbacklight-</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dec</span></code></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">internal/backlight</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">backlight+</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">inc</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">backlight-</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dec</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">internal/xkeyboard</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">xkeyboard/switch</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">switch</span></code></p></td>
+</tr>
+<tr class="row-even"><td rowspan="10"><p><code class="docutils literal notranslate"><span class="pre">internal/mpd</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mpdplay</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">play</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mpdpause</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pause</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mpdstop</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">stop</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mpdprev</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">prev</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mpdnext</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">next</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mpdrepeat</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">repeat</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mpdsingle</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">single</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mpdrandom</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">random</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mpdconsume</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">consume</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mpdseekN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">seek.N</span></code></p></td>
+</tr>
+<tr class="row-even"><td rowspan="3"><p><code class="docutils literal notranslate"><span class="pre">internal/xworkspaces</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">xworkspaces-focus=N</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">focus.N</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">xworkspaces-next</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">next</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">xworkspaces-prev</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">prev</span></code></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="3"><p><code class="docutils literal notranslate"><span class="pre">internal/bspwm</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bspwm-deskfocusN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">focus.N</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bspwm-desknext</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">next</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bspwm-deskprev</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">prev</span></code></p></td>
+</tr>
+<tr class="row-even"><td rowspan="3"><p><code class="docutils literal notranslate"><span class="pre">internal/i3</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">i3wm-wsfocus-N</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">focus.N</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">i3-wsnext</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">next</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">i3-wsprev</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">prev</span></code></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">custom/menu</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">menu-open-N</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">open.N</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">menu-close</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">close</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some deprecated action names are suffixed with <code class="docutils literal notranslate"><span class="pre">N</span></code>, this means that that
+action has some additional data (represented by that <code class="docutils literal notranslate"><span class="pre">N</span></code>), in the new
+action names this data will appear in exactly the same way, after a period.</p>
+</div>
+<div class="section" id="menu-module-example">
+<span id="menu-example"></span><h4><a class="toc-backref" href="#id19">Menu Module Example</a><a class="headerlink" href="#menu-module-example" title="Permalink to this headline">¶</a></h4>
+<p>The menu module is the only module where we have to explicitly use actions for
+it to work. Because of this, almost everyone will need to update their menu
+module to use the new action format.</p>
+<p>Below you can see an example of a menu module:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[module/apps]</span>
+<span class="na">type</span> <span class="o">=</span> <span class="s">custom/menu</span>
+
+<span class="na">menu-0-0</span> <span class="o">=</span> <span class="s">Browsers</span>
+<span class="na">menu-0-0-exec</span> <span class="o">=</span> <span class="s">menu-open-1</span>
+<span class="na">menu-0-1</span> <span class="o">=</span> <span class="s">Multimedia</span>
+<span class="na">menu-0-1-exec</span> <span class="o">=</span> <span class="s">menu-open-2</span>
+
+<span class="na">menu-1-0</span> <span class="o">=</span> <span class="s">Firefox</span>
+<span class="na">menu-1-0-exec</span> <span class="o">=</span> <span class="s">firefox &amp;</span>
+<span class="na">menu-1-1</span> <span class="o">=</span> <span class="s">Chromium</span>
+<span class="na">menu-1-1-exec</span> <span class="o">=</span> <span class="s">chromium &amp;</span>
+
+<span class="na">menu-2-0</span> <span class="o">=</span> <span class="s">Gimp</span>
+<span class="na">menu-2-0-exec</span> <span class="o">=</span> <span class="s">gimp &amp;</span>
+<span class="na">menu-2-1</span> <span class="o">=</span> <span class="s">Scrot</span>
+<span class="na">menu-2-1-exec</span> <span class="o">=</span> <span class="s">scrot &amp;</span>
+</pre></div>
+</div>
+<p>This module uses two actions: <code class="docutils literal notranslate"><span class="pre">menu-open-1</span></code> and <code class="docutils literal notranslate"><span class="pre">menu-open-2</span></code>.
+These are actions with data, the data specifies which level of the menu should
+be opened.</p>
+<p>Looking at the table, we see that the new action name for <code class="docutils literal notranslate"><span class="pre">menu-open-N</span></code> is
+<code class="docutils literal notranslate"><span class="pre">open.N</span></code>, where <code class="docutils literal notranslate"><span class="pre">.N</span></code> is the data attached to the action.
+Putting this together with the name of the module gives us <code class="docutils literal notranslate"><span class="pre">#apps.open.1</span></code> and
+<code class="docutils literal notranslate"><span class="pre">#apps.open.2</span></code> as action strings.
+Since your menu module likely has a different name, your action strings will
+likely not use <code class="docutils literal notranslate"><span class="pre">apps</span></code>, but the name of your module.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[module/apps]</span>
+<span class="na">type</span> <span class="o">=</span> <span class="s">custom/menu</span>
+
+<span class="na">menu-0-0</span> <span class="o">=</span> <span class="s">Browsers</span>
+<span class="na">menu-0-0-exec</span> <span class="o">=</span> <span class="s">#apps.open.1</span>
+<span class="na">menu-0-1</span> <span class="o">=</span> <span class="s">Multimedia</span>
+<span class="na">menu-0-1-exec</span> <span class="o">=</span> <span class="s">#apps.open.2</span>
+
+<span class="na">menu-1-0</span> <span class="o">=</span> <span class="s">Firefox</span>
+<span class="na">menu-1-0-exec</span> <span class="o">=</span> <span class="s">firefox &amp;</span>
+<span class="na">menu-1-1</span> <span class="o">=</span> <span class="s">Chromium</span>
+<span class="na">menu-1-1-exec</span> <span class="o">=</span> <span class="s">chromium &amp;</span>
+
+<span class="na">menu-2-0</span> <span class="o">=</span> <span class="s">Gimp</span>
+<span class="na">menu-2-0-exec</span> <span class="o">=</span> <span class="s">gimp &amp;</span>
+<span class="na">menu-2-1</span> <span class="o">=</span> <span class="s">Scrot</span>
+<span class="na">menu-2-1-exec</span> <span class="o">=</span> <span class="s">scrot &amp;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Polybar User Manual</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Content:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Actions</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Manual Pages:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../man/polybar.1.html">polybar(1)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/polybar.5.html">polybar(5)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">For Contributors:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev/packaging.html">Packaging Polybar</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Developer Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev/release-workflow.html">Release Workflow</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">Polybar Documentation</a></li>
+      <li>Next: <a href="../man/polybar.1.html" title="next chapter">polybar(1)</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016-2021, Michael Carlberg & contributors.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/user/actions.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,15 @@
+2021/04/10-21:31:35.128 dbf Reusing MANIFEST /home/shikikan/.config/chromium/Default/IndexedDB/https_www.youtube.com_0.indexeddb.leveldb/MANIFEST-000001
+2021/04/10-21:31:35.129 dbf Recovering log #98
+2021/04/10-21:31:35.776 dbf Reusing old log /home/shikikan/.config/chromium/Default/IndexedDB/https_www.youtube.com_0.indexeddb.leveldb/000098.log 
+2021/04/10-21:36:43.038 36d2 Level-0 table #103: started
+2021/04/10-21:36:43.505 36d2 Level-0 table #103: 186754 bytes OK
+2021/04/10-21:36:43.511 36d2 Delete type=0 #98
+2021/04/10-21:36:43.511 7b12 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2021/04/10-21:36:43.511 7b12 Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x06\x01 \x01\x03\x00W\x00E\x00B\x00\x04\x02\x01\x16\x00s\x00e\x00r\x00v\x00i\x00c\x00e\x00:\x00g\x00u\x00i\x00d\x00e\x00:\x00f\x00a\x00l\x00l\x00b\x00a\x00c\x00k\x01\x03\x00W\x00E\x00B' @ 57053 : 1
+2021/04/10-21:36:43.511 7b12 Compacting 1@1 + 1@2 files
+2021/04/10-21:36:43.539 7b12 Generated table #104@1: 255 keys, 15313 bytes
+2021/04/10-21:36:43.539 7b12 Compacted 1@1 + 1@2 files => 15313 bytes
+2021/04/10-21:36:43.562 7b12 compacted to: files[ 0 0 1 0 0 0 0 ]
+2021/04/10-21:36:43.563 7b12 Delete type=2 #100
+2021/04/10-21:36:43.563 7b12 Delete type=2 #103
+2021/04/10-21:36:43.563 36d2 Manual compaction at level-1 from '\x00\x06\x01 \x01\x03\x00W\x00E\x00B\x00\x04\x02\x01\x16\x00s\x00e\x00r\x00v\x00i\x00c\x00e\x00:\x00g\x00u\x00i\x00d\x00e\x00:\x00f\x00a\x00l\x00l\x00b\x00a\x00c\x00k\x01\x03\x00W\x00E\x00B' @ 57053 : 1 .. (end); will stop at (end)
