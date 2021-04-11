@@ -37,5 +37,5 @@ Anyway, Here is my setup :
 More info here : https://www.chezmoi.io/docs/install/
 
 - Run this command
->chezmoi init https://github.com/username/dotfiles.git && chezmoi apply
+>chezmoi init https://github.com/shikikan-neko08/dotfiles.git && chezmoi apply
 
