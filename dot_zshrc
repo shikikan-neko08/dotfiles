@@ -8,7 +8,8 @@ export ZSH="/home/shikikan/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-#ZSH_THEME="powerlevel9k"
+#ZSH_THEME="bureau"
+ZSH_THEME="fox"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -70,7 +71,8 @@ export ZSH="/home/shikikan/.oh-my-zsh"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting
+)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -88,6 +90,16 @@ source $ZSH/oh-my-zsh.sh
 #   export EDITOR='mvim'
 # fi
 
+PRIV="sudo"
+alias yayins="yay -S"
+alias yayupd="yay -Sy"
+alias yayupg="yay -Syu"
+alias pacupd="$PRIV pacman -Sy"
+alias pacupg="$PRIV pacman -Syu"
+alias pacrem="$PRIV pacman -Rcns"
+alias pacrcc="$PRIV pacman -Scc"
+alias pacins="$PRIV pacman -S"
+
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
@@ -99,5 +111,5 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-source /usr/share/zsh-theme-powerlevel9k/powerlevel9k.zsh-theme
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS_FOREGROUND='grey'
+#source /usr/share/zsh-theme-powerlevel9k/powerlevel9k.zsh-theme
+#POWERLEVEL9K_LEFT_PROMPT_ELEMENTS_FOREGROUND='grey'
